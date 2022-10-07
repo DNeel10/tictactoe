@@ -157,10 +157,4 @@ player1 = Player.new("X")
 puts "Player 2: "
 player2 = Player.new("O")
 
-# ttt.announce_players(player1, player2)
 ttt = Game.new("ttt", player1, player2)
-# ttt.setup_game
-
-
-
-# ttt.game(player1, player2)
