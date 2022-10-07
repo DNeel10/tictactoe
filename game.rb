@@ -31,13 +31,11 @@ class Game
     @board = create_board(3, '[ ]')
     @player1 = player1
     @player2 = player2
-    setup_game
     game(player1, player2)
   end
 
   def setup_game
     self.rules
-    self.print_board
   end
 
   def print_board
@@ -83,6 +81,20 @@ class Game
     end
   end
 
+  def draw?
+    unless self.board[0][0] == "[ ]" ||
+        self.board[0][1] == "[ ]" ||
+        self.board[0][2] == "[ ]" ||
+        self.board[1][0] == "[ ]" ||
+        self.board[1][1] == "[ ]" ||
+        self.board[1][2] == "[ ]" ||
+        self.board[2][0] == "[ ]" ||
+        self.board[2][1] == "[ ]" ||
+        self.board[2][2] == "[ ]"
+      return true
+    end
+  end
+
   def announce_players(player1, player2)
     puts ""
     puts "#{player1}"
@@ -97,7 +109,24 @@ class Game
     player.place_marker(self.board)
     self.print_board
     if self.win?(player)
-      exit
+      puts "#{player} wins! Play again - y/n?"
+      replay = gets.chomp
+      if replay == "y"
+        @board = create_board(3, '[ ]')
+        game(@player1, @player2)
+      else
+        puts "Thanks for playing!"
+      end
+    end
+    if self.draw?
+      puts "No Remaining Moves. Play again - y/n?"
+      replay = gets.chomp
+      if replay == "y"
+        @board = create_board(3, '[ ]')
+        game(@player1, @player2)
+      else
+        puts "Thanks for playing!"
+      end
     end
   end
 
@@ -107,6 +136,7 @@ class Game
   end
 
   def game (player1, player2)
+    setup_game
     5.times do |i|
       puts "============================================================================================"
       puts ""
@@ -141,9 +171,16 @@ class Player
     row = gets.to_i
     puts "Which column would you like to place your marker?"
     column = gets.to_i
-    if obj[row-1][column-1] == "[ ]"
-      obj[row-1][column-1] = "[#{@marker}]"
-    else
+    begin
+      if obj[row-1][column-1] == "[ ]"
+        obj[row-1][column-1] = "[#{@marker}]"
+      else
+        puts ""
+        puts "!!!!!!!! Invalid Option, make another selection !!!!!!!!!"
+        puts ""
+        place_marker(obj)
+      end
+    rescue NoMethodError
       puts ""
       puts "!!!!!!!! Invalid Option, make another selection !!!!!!!!!"
       puts ""
